@@ -1,0 +1,84 @@
+version: "2"
+services:
+  bitxhub_node1:
+    restart: always
+    container_name: bitxhub_node1
+    image: meshplus/bitxhub:latest
+    volumes:
+      - ../bitxhub/node1/api:/root/.bitxhub/api
+      - ../bitxhub/node1/bitxhub.toml:/root/.bitxhub/bitxhub.toml
+      - ../bitxhub/node1/genesis.json:/root/.bitxhub/genesis.json
+      - ../bitxhub/node1/network.toml:/root/.bitxhub/network.toml
+      - ../bitxhub/node1/order.toml:/root/.bitxhub/order.toml
+      - ../bitxhub/node1/certs:/root/.bitxhub/certs
+    networks:
+      p2p:
+        ipv4_address: 172.19.0.2
+    ports:
+      - 60011:60011
+      - 9091:9091
+      - 53121:53121
+      - 40011:40011
+  bitxhub_node2:
+    restart: always
+    container_name: bitxhub_node2
+    image: meshplus/bitxhub:latest
+    volumes:
+      - ../bitxhub/node2/api:/root/.bitxhub/api
+      - ../bitxhub/node2/bitxhub.toml:/root/.bitxhub/bitxhub.toml
+      - ../bitxhub/node2/genesis.json:/root/.bitxhub/genesis.json
+      - ../bitxhub/node2/network.toml:/root/.bitxhub/network.toml
+      - ../bitxhub/node2/order.toml:/root/.bitxhub/order.toml
+      - ../bitxhub/node2/certs:/root/.bitxhub/certs
+    networks:
+      p2p:
+        ipv4_address: 172.19.0.3
+    ports:
+      - 60012:60011
+      - 9092:9091
+      - 53122:53121
+      - 40012:40011
+  bitxhub_node3:
+    restart: always
+    container_name: bitxhub_node3
+    image: meshplus/bitxhub:latest
+    volumes:
+      - ../bitxhub/node3/api:/root/.bitxhub/api
+      - ../bitxhub/node3/bitxhub.toml:/root/.bitxhub/bitxhub.toml
+      - ../bitxhub/node3/genesis.json:/root/.bitxhub/genesis.json
+      - ../bitxhub/node3/network.toml:/root/.bitxhub/network.toml
+      - ../bitxhub/node3/order.toml:/root/.bitxhub/order.toml
+      - ../bitxhub/node3/certs:/root/.bitxhub/certs
+    networks:
+      p2p:
+        ipv4_address: 172.19.0.4
+    ports:
+      - 60013:60011
+      - 9093:9091
+      - 53123:53121
+      - 40013:40011
+  bitxhub_node4:
+    restart: always
+    container_name: bitxhub_node4
+    image: meshplus/bitxhub:latest
+    volumes:
+      - ../bitxhub/node4/api:/root/.bitxhub/api
+      - ../bitxhub/node4/bitxhub.toml:/root/.bitxhub/bitxhub.toml
+      - ../bitxhub/node4/genesis.json:/root/.bitxhub/genesis.json
+      - ../bitxhub/node4/network.toml:/root/.bitxhub/network.toml
+      - ../bitxhub/node4/order.toml:/root/.bitxhub/order.toml
+      - ../bitxhub/node4/certs:/root/.bitxhub/certs
+    networks:
+      p2p:
+        ipv4_address: 172.19.0.5
+    ports:
+      - 60014:60011
+      - 9094:9091
+      - 53124:53121
+      - 40014:40011
+networks:
+  p2p:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
+          gateway: 172.19.0.1

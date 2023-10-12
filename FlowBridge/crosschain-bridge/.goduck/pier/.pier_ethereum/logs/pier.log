@@ -1,0 +1,15 @@
+time="2023-09-19T15:55:59.105" level=info msg="appchain adapter start" module=appchain_adapter
+time="2023-09-19T15:55:59.107" level=info msg="BxhAdapter started" module=bxh_adapter
+time="2023-09-19T15:55:59.119" level=info msg="Start To Recover IBTPs!" module=exchanger
+time="2023-09-19T15:55:59.119" level=info msg="End To Recover IBTPs!" module=exchanger
+time="2023-09-19T15:55:59.119" level=info msg="Exchanger started" module=exchanger
+time="2023-09-19T15:55:59.119" level=info msg="listenIBTPFromDestAdaptToServicePairCh bitxhub:1356 Start!" module=exchanger
+time="2023-09-19T15:55:59.119" level=info msg="listenIBTPFromSrcAdaptToServicePairCh appchain:ethappchain1 Start!" module=exchanger
+time="2023-09-19T16:41:43.719" level=info msg="Handle interchain tx wrapper" count=0 height=14 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:44.019" level=info msg="Handle interchain tx wrapper" count=0 height=15 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:46.392" level=info msg="Handle interchain tx wrapper" count=0 height=16 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:47.278" level=info msg="Handle interchain tx wrapper" count=0 height=17 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:47.576" level=info msg="Handle interchain tx wrapper" count=0 height=18 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:48.481" level=info msg="Handle interchain tx wrapper" count=0 height=19 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:49.947" level=info msg="Handle interchain tx wrapper" count=0 height=20 index=0 module=bxh_adapter timeout IDs="[]"
+time="2023-09-19T16:41:52.030" level=info msg="Handle interchain tx wrapper" count=0 height=21 index=0 module=bxh_adapter timeout IDs="[]"
