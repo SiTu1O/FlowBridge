@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+.highlight:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: green !important; /* color elements as green */
+}
+.highlight-running:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: lightgreen !important; /* color elements as green */
+}
+.highlight-external:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: sandybrown !important; /* color elements as green */
+}
+
+div.input-params {
+  min-width: 400px;
+}
+
+.bpmn-icon-task.red {
+  color: #cc0000 !important;
+}
+
+.icon-custom {
+  border-radius: 50%;
+  background-size: 75%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.crossChain-task {
+  position: relative;
+  /* background-image: url('https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/rules.png'); */
+  background-image: url('./assets/crossChain.png');
+}
+
+.TH-task {
+  position: relative;
+  /* background-image: url('https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/rules.png'); */
+  background-image: url('./assets/加密文件夹2.png');
+}
+
+.risc0-task {
+  position: relative;
+  /* background-image: url('https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/rules.png'); */
+  background-image: url('./assets/我的证明.png');
+}

@@ -1,0 +1,35 @@
+title = "Pier"
+
+[appchain]
+  config = "fabric"
+  plugin = "appchain_plugin"
+
+[ha]
+  mode = "single"
+
+[log]
+  dir = "logs"
+  filename = "pier.log"
+  level = "debug"
+  report_caller = false
+
+[mode]
+  type = "relay"
+
+  [mode.direct]
+    peers = ["/ip4/host.docker.internal/tcp/4003/p2p/QmS78YUNXbxjaKivSygyDkxjZXedYy4TF6vfAJRPMRYdZ8", "/ip4/host.docker.internal/tcp/4004/p2p/QmZpeCcBQBaurf8SUEvxjRY1nLYAHHUzqWLEXd4uoiuE9K"]
+
+  [mode.relay]
+    addr = "host.docker.internal:60011"
+    addrs = ["localhost:60011", "localhost:60012", "localhost:60013", "localhost:60014"]
+    quorum = 2
+    validators = ["0x000f1a7a08ccc48e5d30f80850cf1cf283aa3abd", "0xe93b92f1da08f925bdee44e91e7768380ae83307", "0xb18c8575e3284e79b92100025a31378feb8100d6", "0x856E2B9A5FA82FD1B031D1FF6863864DBAC7995D"]
+
+[port]
+  http = 44564
+  pprof = 44565
+
+[security]
+  common_name = "BitXHub"
+  enable_tls = false
+  tlsca = "certs/agency.cert"

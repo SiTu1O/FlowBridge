@@ -1,0 +1,121 @@
+// SPDX-License-Identifier: SimPL-2.0
+pragma solidity >=0.5.6;
+pragma experimental ABIEncoderV2;
+
+
+contract <%= oracleInfo.oracleName %>_Oracle {
+    struct Request {
+    <%        oracleInfo.parameterInfo.forEach(val => { -%>
+        <%= val.type.replace("memory","") %> <%= val.name %>;    
+<%        }) -%>
+        function (uint, uint) external returns (bool) callback;      
+    }
+    Request [] requests ;
+    event <%= oracleInfo.oracleName %>_Requested(uint);
+
+    mapping(string => string) dataFunction;
+
+    mapping(string => string) dataM;
+    // change the address of Broker accordingly
+    address BrokerAddr;
+
+    // AccessControl
+    modifier onlyBroker {
+        require(msg.sender == BrokerAddr, "Invoker are not the Broker");
+        _;
+    }
+
+    constructor(address _brokerAddr) public {
+        BrokerAddr = 0x857133c5C69e6Ce66F7AD46F200B9B3573e77582;
+        Broker(BrokerAddr).register();
+    }
+
+    function register() public {
+        Broker(BrokerAddr).register();
+    }
+
+    // contract for data exchange
+    function getData(string memory key) public view returns(string memory) {
+        return dataM[key];
+    }
+    
+    //Initiate an interface to get data transactions across the chain
+    function get(string memory destChainServiceID, string memory key) public {
+        bytes[] memory args = new bytes[](1);
+        args[0] = abi.encodePacked(key);
+
+        bytes[] memory argsCb = new bytes[](1);
+        argsCb[0] = abi.encodePacked(key);
+
+        Broker(BrokerAddr).emitInterchainEvent(destChainServiceID, "interchainGet", args, "interchainSet", argsCb, "", new bytes[](0), false);
+    }
+
+    function set(string memory key, string memory value) public {
+        dataM[key] = value;
+    }
+
+    function interchainSet(bytes[] memory args) public onlyBroker {
+        require(args.length == 2, "interchainSet args' length is not correct, expect 2");
+        string memory key = string(args[0]);
+        string memory value = string(args[1]);
+        set(key, value);
+    }
+
+    function interchainGet(bytes[] memory args, bool isRollback) public onlyBroker returns(bytes[] memory) {
+        require(args.length == 1, "interchainGet args' length is not correct, expect 1");
+        string memory key = string(args[0]);
+
+        bytes[] memory result = new bytes[](1);
+        result[0] = abi.encodePacked(dataM[key]);
+
+        return result;
+    }
+
+   function stringToUint(string memory s) public pure returns(uint) {
+        bytes memory b = bytes(s);
+        uint result = 0;
+        for(uint i = 0; i < b.length; i++) {
+        if(uint8(b[i]) >= 48 && uint8(b[i]) <= 57) {
+            result = result * 10 + (uint8(b[i]) - 48);
+        }
+        }
+        return result;
+    }
+
+    function getDataFunction(string memory key) public view returns(string memory) {
+        return dataFunction[key];
+    }
+
+    function setDataFunction(string memory key, string memory value) public {
+        dataFunction[key] = value;
+    }
+
+    function query_service (<%= concatOracleParameters(oracleInfo.oracleName, true) %> function (uint, uint) external returns (bool) callback) public returns (uint) {
+        uint index = requests.length;
+        this.setDataFunction("DataFunction", "CrossChainFunction");
+        get("1356:appchain1:mychannel&data_swapper","assessLoanRiskResult");
+        requests.push(Request(<%= concatOracleParameters(oracleInfo.oracleName, false) %> callback));
+        emit <%= oracleInfo.oracleName %>_Requested(index);
+        return index;
+    }
+    
+    function reply_callbak (uint reqId ,  uint result1) public {
+        string memory value = this.getData("assessLoanRiskResult");
+        uint result = this.stringToUint(value);
+        requests[reqId].callback(reqId, result);
+    }
+}
+
+abstract contract Broker {
+    function emitInterchainEvent(
+        string memory destFullServiceID,
+        string memory func,
+        bytes[] memory args,
+        string memory funcCb,
+        bytes[] memory argsCb,
+        string memory funcRb,
+        bytes[] memory argsRb,
+        bool isEncrypt) public virtual;
+
+    function register() public virtual;
+}
