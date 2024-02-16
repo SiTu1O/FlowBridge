@@ -1,0 +1,23 @@
+{
+    "caliper": {
+        "blockchain": "ethereum"
+    },
+    "ethereum": {
+        "url": "ws://localhost:8545",
+        "contractDeployerAddress": "0x20f7fac801c5fc3f7e20cfbadaa1cdb33d818fa3",
+        "contractDeployerAddressPassword": "",
+        "fromAddress": "0x20f7fac801c5fc3f7e20cfbadaa1cdb33d818fa3",
+        "fromAddressPassword": "",
+        "transactionConfirmationBlocks": 12,
+        "contracts": {
+            "simple": {
+                "path": "/query.json",
+                "gas": {
+                    "open": 45000,
+                    "query": 100000,
+                    "transfer": 70000
+                }
+            }
+        }
+    }
+}

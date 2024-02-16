@@ -1,0 +1,21 @@
+test:
+    name: mycc-contract-benchmark
+    description: test benchmark
+    workers:
+      number: 2
+    rounds:
+      - label: query
+        description: Read asset benchmark
+        txNumber: 1000
+        rateControl:
+          type: fixed-rate
+          opts:
+            tps: 1000
+        workload:
+          module: benchmarks/query.js
+          arguments:
+            assets: 10
+            contractId: mycc
+
+
+npx caliper launch manager --caliper-workspace ./ --caliper-networkconfig benchmarks/networkConfig.yaml --caliper-benchconfig benchmarks/config.yaml --caliper-flow-only-test --caliper-fabric-gateway-enable
