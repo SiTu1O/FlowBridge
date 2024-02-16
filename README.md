@@ -1,2 +1,2 @@
 # FlowBridge
-FlowBridge: A Novel Business Process Engine based on Cross-Blockchain Technology
+FlowBridge: Process engine supporting multi-organizational cross-chain business integration
