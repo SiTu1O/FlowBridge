@@ -9,6 +9,8 @@ import { ModelInfo } from './definitions';
 import { parseModel } from './models.parsers';
 import { modelStore } from './models.store';
 import { Register_Function } from './registeContract';
+import { parse } from './subProcessChainCode/parse';
+
 
 import { log } from "util";
 
@@ -21,8 +23,8 @@ http.listen(8090, () => {
 });
 
 const models: Router = Router();
-// var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-var web3 = new Web3(new Web3.providers.HttpProvider("http://43.142.87.250:8545"));
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+// var web3 = new Web3(new Web3.providers.HttpProvider("http://43.142.87.250:8545"));
 //var web3 = new Web3(new Web3.providers.HttpProvider("http://193.40.11.64:80"));
 
 var activityContractMap: Map<string, Array<string>> = new Map();
@@ -138,6 +140,11 @@ models.post('/models', (req, res, next) => {
     let modelInfo: ModelInfo = req.body as ModelInfo;
     try {
         let cont = parseModel(modelInfo);
+
+        //专门写一段代码，用于解析BPMN中的子流程 ,生成chaincode
+        console.log("--下面这一行是解析成chaincode--");
+        parse(modelInfo.bpmn,'modelInfoTest');
+
         cont.then(() => {
 
             let input = {};
@@ -181,28 +188,28 @@ models.post('/models', (req, res, next) => {
                 }
             };
 
-            let output = JSON.parse(solc.compile(JSON.stringify(input1))).contracts;
-            console.log(output);
+            // let output = JSON.parse(solc.compile(JSON.stringify(input1))).contracts;
+            // console.log(output);
 
-            if (Object.keys(output).length === 0) {
-                res.status(400).send('COMPILATION ERROR IN SMART CONTRACTS');
-                console.log('COMPILATION ERROR IN SMART CONTRACTS');
-                console.log('----------------------------------------------------------------------------------------------');
-                return;
-            }
+            // if (Object.keys(output).length === 0) {
+            //     res.status(400).send('COMPILATION ERROR IN SMART CONTRACTS');
+            //     console.log('COMPILATION ERROR IN SMART CONTRACTS');
+            //     console.log('----------------------------------------------------------------------------------------------');
+            //     return;
+            // }
 
-            console.log('CONTRACTS');
-            Object.keys(output).forEach(key => {
-                console.log(key);
-            })
-            modelInfo.contracts = output;
-            modelStore.set(modelInfo.name, modelInfo);
-            res.status(201).send({ id: modelInfo.name,
-                                   name: modelInfo.entryContractName, 
-                                   bpmn: modelInfo.bpmn, 
-                                   solidity: modelInfo.solidity });
-            console.log('PROCESSED SUCCESSFULLY');
-            console.log('----------------------------------------------------------------------------------------------');
+            // console.log('CONTRACTS');
+            // Object.keys(output).forEach(key => {
+            //     console.log(key);
+            // })
+            // modelInfo.contracts = output;
+            // modelStore.set(modelInfo.name, modelInfo);
+            // res.status(201).send({ id: modelInfo.name,
+            //                        name: modelInfo.entryContractName, 
+            //                        bpmn: modelInfo.bpmn, 
+            //                        solidity: modelInfo.solidity });
+            // console.log('PROCESSED SUCCESSFULLY');
+            // console.log('----------------------------------------------------------------------------------------------');
         });
 
     } catch (e) {
@@ -219,8 +226,6 @@ let globalControlFlowInfo;
 var computeActivation = function (contractAddress) {
     var _a = instances.get(contractAddress), contractName = _a[0], modelInfo = _a[1];
     let modelInfoNameabi =  modelInfo.name + "_Contract";
-    console.log(modelInfo.name); //BPM17_Running_Example
-    console.log(modelInfoNameabi); //BPM17_Running_Example_Contract
     var contract = web3.eth.contract(modelInfo.contracts[modelInfo.name][modelInfoNameabi].abi);
     var elementName = contractName.slice(contractName.indexOf(':') + 1, contractName.indexOf('_Contract'));
     var controlFlowInfo = modelInfo.controlFlowInfoMap.get(elementName);
@@ -396,9 +401,9 @@ models.post('/models/:modelId', (req, res) => {
         console.log(modelInfo.name);
         console.log(modelInfoNameabi);
         let ProcessContract = web3.eth.contract(modelInfo.contracts[modelInfo.name][modelInfoNameabi].abi);
-        //console.log(JSON.stringify(modelInfo.contracts[modelInfo.name][modelInfoNameabi].abi, null, 2));
+        console.log(JSON.stringify(modelInfo.contracts[modelInfo.name][modelInfoNameabi].abi, null, 2));
         web3.personal.unlockAccount(web3.eth.accounts[0], '', 600);
-        ProcessContract.new('0x857133c5C69e6Ce66F7AD46F200B9B3573e77582',
+        ProcessContract.new(
             { from: web3.eth.accounts[0], data: "0x" + modelInfo.contracts[modelInfo.name][modelInfoNameabi].evm.bytecode.object, gas: 10000000 },
             (err, contract) => {
                 if (err) {
